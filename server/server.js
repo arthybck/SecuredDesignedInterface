@@ -3,7 +3,7 @@
  * @Date:   2019-01-22T11:14:16+01:00
  * @Filename: server.js
  * @Last modified by:   Arthur Brunck
- * @Last modified time: 2019-01-22T19:17:44+01:00
+ * @Last modified time: 2019-02-05T19:35:23+01:00
  */
 
 "use strict";
@@ -14,6 +14,12 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const helmet = require("helmet");
 
+const authController = require("./controllers/auth.js");
+const logController = require("./controllers/logger.js");
+const userController = require("./controllers/users.js");
+const mailController = require("./controllers/mails.js");
+// const seed = require("./seed.js
+
 const port = process.env.BUILD_ENVIRONMENT === "PRODUCTION" ? 3000 : 3080;
 const mongooseUri =
   process.env.BUILD_ENVIRONMENT === "PRODUCTION"
@@ -22,9 +28,6 @@ const mongooseUri =
 
 console.time("[*] Booting");
 initMongoConnect();
-if (process.env.BUILD_ENVIRONMENT !== "PRODUCTION") {
-  initTestUsers();
-}
 
 const app = express();
 configApp(app);
@@ -65,6 +68,47 @@ function configRouter(app) {
   router.route("/").get(logController.myLogger, (req, res) => {
     return res.status(200).send("Hello World!");
   });
+
+  // ------------------------ USER CONTROLLER ------------------------
+  router
+    .route("/register")
+    .post(logController.myLogger, userController.registerUser);
+
+  router.route("/login").post(logController.myLogger, userController.logUser);
+
+  router
+    .route("/profile")
+    .get(
+      authController.isAuthenticated,
+      logController.myLogger,
+      userController.getUser
+    );
+
+  router
+    .route("/users")
+    .get(
+      authController.isAuthenticated,
+      logController.myLogger,
+      authController.isMembers,
+      userController.getUsers
+    )
+    .put(
+      authController.isAuthenticated,
+      logController.myLogger,
+      authController.isMembers,
+      userController.putUser
+    );
+
+  // ------------------------ MAIL CONTROLLER ------------------------
+  router.route("/mail").post(logController.myLogger, mailController.sendMail);
+
+  router.route("/logout").get((req, res) => {
+    res.status(200).send({
+      auth: false,
+      token: null
+    });
+  });
+
   app.use(router);
 }
 
@@ -80,9 +124,9 @@ function initMongoConnect() {
 }
 
 const server = app.listen(port, () => {
-  console.log("[*] Written and maintained by Arthybck");
+  console.log("[*] Written and maintained by arthybck");
   console.log(
-    "[*] Before running the app, consider 'npm audit' to check for any vulnerabilities"
+    "[*] Before running the app, consider 'npm audit' && 'snyk test' to check for any vulnerabilities"
   );
   console.log(
     "[*] Moreover, have a look at : https://www.npmjs.com/advisories\n\n"
