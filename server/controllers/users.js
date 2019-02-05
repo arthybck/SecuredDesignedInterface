@@ -2,8 +2,8 @@
  * @Author: Arthur Brunck <arthybck>
  * @Date:   2019-01-22T11:14:16+01:00
  * @Filename: users.js
- * @Last modified by:   arthybck
- * @Last modified time: 2019-01-22T12:47:43+01:00
+ * @Last modified by:   Arthur Brunck
+ * @Last modified time: 2019-02-05T19:54:36+01:00
  */
 
 "use strict";
@@ -11,9 +11,8 @@
 const User = require("../models/users.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const secret = process.env.TokenSuperSecret;
+const secret = "mysecret";
 
-const SCOUT = "Scout";
 const MEMBERS = "Members";
 const ADMINS = "Admins";
 
@@ -123,23 +122,6 @@ exports.getMemberss = async (req, res) => {
     await User.find(
       {
         role: MEMBERS
-      },
-      (err, users) => {
-        if (err) return res.status(500).send("Internal Server Error");
-        else {
-          return res.status(200).send(users);
-        }
-      }
-    );
-  }
-};
-
-exports.getScouts = async (req, res) => {
-  if (!req || !req.user) return res.status(400).send("Bad Request");
-  else {
-    await User.find(
-      {
-        role: SCOUT
       },
       (err, users) => {
         if (err) return res.status(500).send("Internal Server Error");

@@ -3,13 +3,13 @@
  * @Date:   2019-01-22T11:14:16+01:00
  * @Filename: auth.js
  * @Last modified by:   Arthur Brunck
- * @Last modified time: 2019-02-05T19:45:13+01:00
+ * @Last modified time: 2019-02-05T19:54:04+01:00
  */
 
 "use strict";
 
 const jwt = require("jsonwebtoken");
-const secret = "mySecret";
+const secret = "mysecret";
 const passport = require("passport");
 const CustomStrategy = require("passport-custom");
 

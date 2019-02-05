@@ -3,7 +3,7 @@
  * @Date:   2019-01-22T11:14:16+01:00
  * @Filename: server.js
  * @Last modified by:   Arthur Brunck
- * @Last modified time: 2019-02-05T19:49:20+01:00
+ * @Last modified time: 2019-02-05T19:53:03+01:00
  */
 
 "use strict";
@@ -46,10 +46,7 @@ function configApp(app) {
     res.header("X-XSS-Protection", "1; mode=block");
     res.header("X-Content-Type-Options", "nosniff");
     res.header("Access-Control-Allow-Origin", "*");
-    res.header(
-      "Access-Control-Allow-Methods",
-      "GET, POST, PUT, DELETE, OPTIONS, PATCH"
-    );
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
     res.header(
       "Access-Control-Allow-Headers",
       "Origin, X-Requested-With, Content-Type, Authorization, x-access-token, Accept"
