@@ -34,15 +34,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void SingIn(View view) {
-        if (isValidEmail(EmailAddress.getText()) && Password.length() > 7) {
-            Log.e("isvalidEmail = ", "oui");
-            //faire appel API
-            Intent i = new Intent(this, MainActivity.class);
-            startActivity(i);
+//        if (isValidEmail(EmailAddress.getText()) && Password.length() > 7) {
+//            Log.e("isvalidEmail = ", "oui");
+//            //faire appel API
+//            Intent i = new Intent(this, MainActivity.class);
+//            startActivity(i);
+//
+//        } else {
+//            Log.e("invalid email password", "oui");
+//        }
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
 
-        } else {
-            Log.e("invalid email password", "oui");
-        }
 
     }
 }
