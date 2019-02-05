@@ -2,16 +2,14 @@
  * @Author: Arthur Brunck <arthybck>
  * @Date:   2019-01-22T11:14:16+01:00
  * @Filename: auth.js
- * @Last modified by:   arthybck
- * @Last modified time: 2019-01-22T12:24:20+01:00
+ * @Last modified by:   Arthur Brunck
+ * @Last modified time: 2019-02-05T19:45:13+01:00
  */
 
 "use strict";
 
 const jwt = require("jsonwebtoken");
-const secret = process.env.TokenSuperSecret
-  ? process.env.TokenSuperSecret
-  : "SuperSecret";
+const secret = "mySecret";
 const passport = require("passport");
 const CustomStrategy = require("passport-custom");
 
@@ -35,13 +33,13 @@ passport.use(
   })
 );
 
-exports.isMembers = async (req, res, next) => {
+exports.isMembers = async (req, res, forward) => {
   await User.findOne({ _id: req.user.userId }, (err, user) => {
     if (err) return res.status(500).send("Something went wrong: " + err);
     else if (user.role !== ADMINS && user.role !== MEMBERS) {
       return res.status(401).send("Insufficient permission.");
     } else {
-      next();
+      forward();
     }
   });
 };
