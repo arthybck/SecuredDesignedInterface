@@ -9,6 +9,7 @@
   "dependencies": {
     "bcrypt": "^3.0.3",
     "body-parser": "^1.18.3",
+    "eslint-config-airbnb": "^17.1.0",
     "express": "^4.16.3",
     "helmet": "^3.15.0",
     "jsonwebtoken": "^8.3.0",
@@ -19,11 +20,5 @@
     "passport-custom": "^1.0.5",
     "passport-http": "^0.3.0",
     "path": "^0.12.7"
-  },
-  "devDependencies": {
-    "ejs": "^2.6.1",
-    "eslint": "^5.6.1",
-    "eslint-config-google": "^0.10.0",
-    "nodemon": "^1.18.9"
   }
 }
