@@ -3,7 +3,7 @@
  * @Date:   2019-01-22T11:14:16+01:00
  * @Filename: server.js
  * @Last modified by:   Arthur Brunck
- * @Last modified time: 2019-02-07T09:32:42+01:00
+ * @Last modified time: 2019-02-07T10:08:31+01:00
  */
 
 "use strict";
@@ -25,7 +25,8 @@ const mongooseUri =
     ? "mongodb://localhost:27017/arthybck"
     : "mongodb://localhost:27017/arthybck-dev";
 
-const initMongoConnection = () => {
+initMongoConnection();
+function initMongoConnection() {
   console.time("[*] Booting");
   mongoose.Promise = global.Promise;
   mongoose.connect(
@@ -35,37 +36,12 @@ const initMongoConnection = () => {
       useNewUrlParser: true
     }
   );
-};
+}
 
 const app = express();
 configApp(app);
 
-const configApp = app => {
-  app.use(helmet());
-  app.use(
-    bodyParser.urlencoded({
-      extended: true
-    })
-  );
-  app.use(bodyParser.json());
-  app.use(passport.initialize());
-  app.use((req, res, forward) => {
-    res.header("Content-Security-Policy", "default-src 'self'");
-    res.header("X-Frame-Options", "SAMEORIGIN");
-    res.header("X-XSS-Protection", "1; mode=block");
-    res.header("X-Content-Type-Options", "nosniff");
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Authorization, x-access-token, Accept"
-    );
-    forward();
-  });
-  routerConfiguration(app);
-};
-
-const routerConfiguration = app => {
+function routerConfiguration(app) {
   const router = express.Router();
 
   router.route("/").get((req, res) => {
@@ -101,6 +77,13 @@ const routerConfiguration = app => {
 
   //Profile     --- GET
   router.route("/logout").get((req, res) => {
+    console.log(
+      passport.authenticate("jwt", {
+        session: false
+      })
+    );
+    //Create a function that revoke the token
+    req.logout();
     res.status(200).send({
       auth: false,
       token: null
@@ -108,7 +91,32 @@ const routerConfiguration = app => {
   });
 
   app.use(router);
-};
+}
+
+function configApp(app) {
+  app.use(helmet());
+  app.use(
+    bodyParser.urlencoded({
+      extended: true
+    })
+  );
+  app.use(bodyParser.json());
+  app.use(passport.initialize());
+  app.use((req, res, forward) => {
+    res.header("Content-Security-Policy", "default-src 'self'");
+    res.header("X-Frame-Options", "SAMEORIGIN");
+    res.header("X-XSS-Protection", "1; mode=block");
+    res.header("X-Content-Type-Options", "nosniff");
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Authorization, x-access-token, Accept"
+    );
+    forward();
+  });
+  routerConfiguration(app);
+}
 
 const server = app.listen(port, () => {
   console.log(

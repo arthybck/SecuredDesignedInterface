@@ -3,7 +3,7 @@
  * @Date:   2019-01-22T11:14:16+01:00
  * @Filename: users.js
  * @Last modified by:   Arthur Brunck
- * @Last modified time: 2019-02-07T09:25:43+01:00
+ * @Last modified time: 2019-02-07T10:17:49+01:00
  */
 
 "use strict";
@@ -48,7 +48,7 @@ exports.logUser = (req, res) => {
         });
       } else return res.status(404).send("Not Found");
     }
-  ).select("+password");
+  ).select("password");
 };
 
 exports.registerUser = (req, res) => {
