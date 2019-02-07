@@ -3,7 +3,7 @@
  * @Date:   2019-01-22T11:14:16+01:00
  * @Filename: users.js
  * @Last modified by:   Arthur Brunck
- * @Last modified time: 2019-02-05T19:54:36+01:00
+ * @Last modified time: 2019-02-07T09:25:43+01:00
  */
 
 "use strict";
@@ -99,39 +99,39 @@ exports.getUsers = async (req, res) => {
   }
 };
 
-exports.getHighMemberss = async (req, res) => {
-  if (!req || !req.user) return res.status(400).send("Bad Request");
-  else {
-    await User.find(
-      {
-        role: ADMINS
-      },
-      (err, users) => {
-        if (err) return res.status(500).send("Internal Server Error");
-        else {
-          return res.status(200).send(users);
-        }
-      }
-    );
-  }
-};
+// exports.getHighMemberss = async (req, res) => {
+//   if (!req || !req.user) return res.status(400).send("Bad Request");
+//   else {
+//     await User.find(
+//       {
+//         role: ADMINS
+//       },
+//       (err, users) => {
+//         if (err) return res.status(500).send("Internal Server Error");
+//         else {
+//           return res.status(200).send(users);
+//         }
+//       }
+//     );
+//   }
+// };
 
-exports.getMemberss = async (req, res) => {
-  if (!req || !req.user) return res.status(400).send("Bad Request");
-  else {
-    await User.find(
-      {
-        role: MEMBERS
-      },
-      (err, users) => {
-        if (err) return res.status(500).send("Internal Server Error");
-        else {
-          return res.status(200).send(users);
-        }
-      }
-    );
-  }
-};
+// exports.getMemberss = async (req, res) => {
+//   if (!req || !req.user) return res.status(400).send("Bad Request");
+//   else {
+//     await User.find(
+//       {
+//         role: MEMBERS
+//       },
+//       (err, users) => {
+//         if (err) return res.status(500).send("Internal Server Error");
+//         else {
+//           return res.status(200).send(users);
+//         }
+//       }
+//     );
+//   }
+// };
 
 exports.getUser = async (req, res) => {
   if (!req || !req.user || !req.user.userId)
@@ -149,6 +149,7 @@ exports.getUser = async (req, res) => {
   }
 };
 
+// TODO: fix the asyn problem in the response body of the request
 exports.putUser = async (req, res) => {
   if (!req || !req.user || !req.user.userId)
     return res.status(400).send("Bad Request");
