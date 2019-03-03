@@ -2,8 +2,8 @@
  * @Author: Arthur Brunck <arthybck>
  * @Date:   2019-01-22T11:14:16+01:00
  * @Filename: users.js
- * @Last modified by:   Arthur Brunck
- * @Last modified time: 2019-02-07T10:17:49+01:00
+ * @Last modified by:   arthybck
+ * @Last modified time: 2019-03-03T17:48:09+01:00
  */
 
 "use strict";
@@ -52,6 +52,7 @@ exports.logUser = (req, res) => {
 };
 
 exports.registerUser = (req, res) => {
+  console.log(req.body);
   if (!req || !req.body.username || !req.body.password || !req.body.email)
     return res.status(400).send("Bad Request");
   else {
