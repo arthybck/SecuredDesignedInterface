@@ -28,13 +28,25 @@
 
 
     <EditText
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:hint="Username"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="40dp"
+        android:background="@color/colorWhite"
+        android:padding="5dp"
+        android:inputType="textEmailAddress"
+        />
+
+    <EditText
         android:id="@+id/userEmail"
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:hint="Email"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:layout_marginTop="90dp"
         android:background="@color/colorWhite"
         android:padding="5dp"
         android:inputType="textEmailAddress"
@@ -60,8 +72,8 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:text="Sign In"
-        android:id="@+id/signInBtn"
+        android:text="Create account"
+        android:id="@+id/createacc"
         android:textColor="@color/colorWhite"
         android:background="@drawable/signin_ripple"
         android:layout_gravity="bottom"
@@ -71,14 +83,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/registertxt"
-        android:text="Register"
+        android:id="@+id/alreadyreg"
+        android:text="Already register ?"
         android:textColor="@color/colorWhite"
         android:layout_gravity="bottom"
         android:layout_marginTop="10dp"
-        android:textAlignment="center"
-        android:onClick="OnClickRegister"
-        android:clickable="true"/>
+        android:textAlignment="center"/>
 
 
 </LinearLayout>
