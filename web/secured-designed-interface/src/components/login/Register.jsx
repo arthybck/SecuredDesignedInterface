@@ -37,7 +37,12 @@ class Register extends React.Component {
   handleClick = () => {
     const { username, email, password } = this.state;
     console.log(username, email, password);
-    register({ username, email, password });
+    const { handleLogin } = this.props;
+    register({ username, email, password }).then(() => {
+      handleLogin('ok');
+    }).catch(() => {
+      handleLogin('error')
+    });
   };
 
   handleChange = name => e => {

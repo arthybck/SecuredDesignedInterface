@@ -36,7 +36,12 @@ class Login extends React.Component {
 
   handleClick = () => {
     const { username, password } = this.state;
-    login({ username, password });
+    const { handleLogin } = this.props;
+    login({ username, password }).then(() => {
+      handleLogin('ok');
+    }).catch(() => {
+      handleLogin('error')
+    });
   };
 
   handleChange = name => e => {

@@ -7,7 +7,6 @@
  */
 
 import React from "react";
-import PropTypes from "prop-types";
 
 import Grid from "@material-ui/core/Grid";
 
@@ -26,19 +25,14 @@ import PeopleItem from "./PeopleItem";
  *
  * @returns {element} The element returned by the component
  */
-const PeopleList = ({ classes }) => {
+const PeopleList = ({ results =[], classes }) => {
   return (
     <Grid container justify="space-around" alignItems="center">
       {results.map(user => (
-        <PeopleItem key={user.slug} user={user} />
+        <PeopleItem key={user.username} user={user} />
       ))}
-      <Components.LoadMore
-        count={count}
-        totalCount={totalCount}
-        loadMore={loadMore}
-      />
     </Grid>
   );
 };
 
-export default PeoplePage;
+export default PeopleList;

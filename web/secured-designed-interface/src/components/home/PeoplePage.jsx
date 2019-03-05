@@ -7,9 +7,10 @@
  */
 
 import React from "react";
-import PropTypes from "prop-types";
+
 import Grid from "@material-ui/core/Grid";
-import PeopleSearch from "./PeopleSearch";
+
+import PeopleList from "./PeopleList";
 
 /**
  * PeoplePage - The top-level component at /people
@@ -20,7 +21,7 @@ class PeoplePage extends React.Component {
     return (
       <Grid container justify="center" alignItems="center">
         <Grid item xs={12} sm={10}>
-          <Components.PeopleList />
+          <PeopleList />
         </Grid>
       </Grid>
     );
