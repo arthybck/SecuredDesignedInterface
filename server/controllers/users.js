@@ -171,10 +171,6 @@ exports.putUser = async (req, res) => {
                   email: req.body.email,
                   city: req.body.city,
                 }
-              },
-              err => {
-                if (err) console.log(err);
-                return res.status(500).send({ message: 'Internal server error, an error occured while updating the user' });
               }
             );
             return res.status(200).send({
