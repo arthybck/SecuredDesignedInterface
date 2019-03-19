@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -23,6 +24,7 @@ import fr.tixado_d.secureddesignedinterface.R;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText EmailAddress, Password, Username;
+    private TextView AlreadyRegister;
     private Button Register;
 
     @Override
@@ -34,11 +36,20 @@ public class RegisterActivity extends AppCompatActivity {
         EmailAddress = findViewById(R.id.userEmail);
         Password = findViewById(R.id.userPassword);
         Register = findViewById(R.id.createacc);
+        AlreadyRegister = findViewById(R.id.alreadyreg);
 
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 RegisterBtn(view);
+            }
+        });
+
+        AlreadyRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(view.getContext(), LoginActivity.class);
+                startActivity(i);
             }
         });
 
@@ -48,7 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
         String body = null;
         try {
             body = "username=" + URLEncoder.encode(Username.getText().toString(), "utf-8")  +
-                    "&email=" + URLEncoder.encode(EmailAddress.getText().toString(), "utf-8") +
+                    "&email=" + EmailAddress.getText().toString() +
                     "&password=" + URLEncoder.encode(Password.getText().toString(), "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -57,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
         RequestPostLogin loginRequest = new RequestPostLogin();
         try {
             if (loginRequest.execute("http://10.0.2.2:3080/register", body).get() == "Error") {
-                Log.e("error registerrequest", "Error");
+                Log.e("error registerRequest", "Error");
             }
             else {
                 Intent i = new Intent(this, LoginActivity.class);
