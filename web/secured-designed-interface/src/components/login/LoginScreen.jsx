@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import {withStyles} from "@material-ui/core";
+import { withStyles } from "@material-ui/core";
 
 import AppBar from "@material-ui/core/AppBar";
 import Grid from "@material-ui/core/Grid";
@@ -42,10 +42,11 @@ class LoginScreen extends React.Component {
             badCreds: false,
         };
         this.handleClick = this.handleClick.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
     }
 
     handleClick() {
-        const {button} = this.state;
+        const { button } = this.state;
         let tmp = !button;
         this.setState({
             button: tmp
@@ -53,11 +54,11 @@ class LoginScreen extends React.Component {
     }
 
     handleClose = (event) => {
-        this.setState({badCreds: false});
+        this.setState({ badCreds: false });
     };
 
     handleLogin(status) {
-        const {login} = this.state;
+        const { login } = this.state;
         if (status === 'ok') {
             let tmp = !login;
             this.setState({
@@ -72,8 +73,8 @@ class LoginScreen extends React.Component {
     }
 
     render() {
-        const {classes} = this.props;
-        const {button, login} = this.state;
+        const { classes } = this.props;
+        const { button, login } = this.state;
         return (
             <Grid container>
                 <Grid item xs={12}>
@@ -84,7 +85,7 @@ class LoginScreen extends React.Component {
                                 color="inherit"
                                 aria-label="Menu"
                             >
-                                <MenuIcon/>
+                                <MenuIcon />
                             </IconButton>
                             <Typography variant="h6" color="inherit" className={classes.grow}>
                                 SoSecured
@@ -93,55 +94,55 @@ class LoginScreen extends React.Component {
                     </AppBar>
                 </Grid>
                 {!login ? <Grid
+                    container
+                    justify="center"
+                    alignItems="center"
+                    alignContent="center"
+                >
+                    <Grid
                         container
+                        item
+                        xs={12}
+                        md={8}
                         justify="center"
                         alignItems="center"
                         alignContent="center"
+                        style={{
+                            backgroundColor: "#353537",
+                            paddingTop: "30%",
+                            paddingBottom: "20%"
+                        }}
                     >
+                        <img
+                            src={logo}
+                            alt="logo"
+                            style={{
+                                width: "50%",
+                                height: "auto"
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={11} md={3}>
+                        {button ? <Login handleLogin={this.handleLogin} /> : <Register handleLogin={this.handleLogin} />}
                         <Grid
                             container
-                            item
-                            xs={12}
-                            md={8}
                             justify="center"
                             alignItems="center"
                             alignContent="center"
-                            style={{
-                                backgroundColor: "#353537",
-                                paddingTop: "30%",
-                                paddingBottom: "20%"
-                            }}
                         >
-                            <img
-                                src={logo}
-                                alt="logo"
-                                style={{
-                                    width: "50%",
-                                    height: "auto"
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={11} md={3}>
-                            {button ? <Login handleLogin={this.handleLogin}/> : <Register handleLogin={this.handleLogin}/>}
-                            <Grid
-                                container
-                                justify="center"
-                                alignItems="center"
-                                alignContent="center"
-                            >
-                                <Grid item xs={12}>
-                                    <Button fullWidth variant="outlined" onClick={this.handleClick}>
-                                        {button ? (
-                                            <Typography>Register</Typography>
-                                        ) : (
+                            <Grid item xs={12}>
+                                <Button fullWidth variant="outlined" onClick={this.handleClick}>
+                                    {button ? (
+                                        <Typography>Register</Typography>
+                                    ) : (
                                             <Typography>Login</Typography>
                                         )}
-                                    </Button>
-                                </Grid>
+                                </Button>
                             </Grid>
                         </Grid>
                     </Grid>
-                    : <PeoplePage/>}
+                </Grid>
+                    : <PeoplePage />}
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',
@@ -165,7 +166,7 @@ class LoginScreen extends React.Component {
                             className={classes.close}
                             onClick={this.handleClose}
                         >
-                            <CloseIcon/>
+                            <CloseIcon />
                         </IconButton>,
                     ]}
                 />

@@ -100,7 +100,7 @@ exports.getUsers = async (req, res) => {
   }
 };
 
-// exports.getHighMemberss = async (req, res) => {
+// exports.getAdmins = async (req, res) => {
 //   if (!req || !req.user) return res.status(400).send("Bad Request");
 //   else {
 //     await User.find(
@@ -117,7 +117,7 @@ exports.getUsers = async (req, res) => {
 //   }
 // };
 
-// exports.getMemberss = async (req, res) => {
+// exports.getMembers = async (req, res) => {
 //   if (!req || !req.user) return res.status(400).send("Bad Request");
 //   else {
 //     await User.find(
@@ -150,44 +150,36 @@ exports.getUser = async (req, res) => {
   }
 };
 
-// TODO: fix the asyn problem in the response body of the request
+// TODO: fix the async problem in the response body of the request
 exports.putUser = async (req, res) => {
   if (!req || !req.user || !req.user.userId)
     return res.status(400).send("Bad Request");
   else {
-    await User.findById(
-      {
-        _id: req.body.id
-      },
+    await User.findById({ _id: req.body.id },
       async (err, user) => {
         if (err) return res.status(500).send("Internal Server Error");
         if (!user) return res.status(404).send("Not Found");
         else {
-          if (req.body.username) {
+          if (req.body && req.body.username && req.body.firstname && req.body.lastname && req.body.age && req.body.email && req.body.city) {
             await user.update(
               {
                 $set: {
-                  username: req.body.username
+                  username: req.body.username,
+                  firstname: req.body.firstname,
+                  lastname: req.body.lastname,
+                  age: req.body.age,
+                  email: req.body.email,
+                  city: req.body.city,
                 }
               },
               err => {
                 if (err) console.log(err);
+                return res.status(500).send({ message: 'Internal server error, the user ' });
               }
             );
+            return res.status(200).send(user);
           }
-          if (req.body.role) {
-            await user.update(
-              {
-                $set: {
-                  role: req.body.role
-                }
-              },
-              err => {
-                if (err) console.log(err);
-              }
-            );
-          }
-          return res.status(200).send(user);
+          return res.status(500).send({ message: 'Internal server error, the user ' });
         }
       }
     );

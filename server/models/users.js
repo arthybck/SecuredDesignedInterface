@@ -20,13 +20,6 @@ const UserSchema = new mongoose.Schema({
     required: true,
     maxlength: 254
   },
-  password: {
-    type: String,
-    required: true,
-    minlength: 8,
-    maxlength: 254,
-    select: false
-  },
   email: {
     type: String,
     unique: true,
@@ -34,11 +27,46 @@ const UserSchema = new mongoose.Schema({
     maxlength: 254,
     trim: true
   },
+  password: {
+    type: String,
+    required: true,
+    minlength: 8,
+    maxlength: 254,
+    select: false
+  },
   role: {
     type: String,
     required: true,
     value: [MEMBERS, ADMINS],
     default: MEMBERS
+  },
+  firstname: {
+    type: String,
+    required: true,
+    minlength: 8,
+    maxlength: 254,
+    select: false
+  },
+  lastname: {
+    type: String,
+    required: true,
+    minlength: 8,
+    maxlength: 254,
+    select: false
+  },
+  city: {
+    type: String,
+    required: true,
+    minlength: 8,
+    maxlength: 254,
+    select: false
+  },
+  age: {
+    type: String,
+    required: true,
+    minlength: 8,
+    maxlength: 254,
+    select: false
   }
 });
 
