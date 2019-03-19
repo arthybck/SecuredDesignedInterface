@@ -163,23 +163,28 @@ exports.putUser = async (req, res) => {
           if (req.body && req.body.username && req.body.firstname && req.body.lastname && req.body.age && req.body.email && req.body.city) {
             await user.update(
               {
-                $set: {
-                  username: req.body.username,
-                  firstname: req.body.firstname,
-                  lastname: req.body.lastname,
-                  age: req.body.age,
-                  email: req.body.email,
-                  city: req.body.city,
-                }
+                username: req.body.username,
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                age: req.body.age,
+                email: req.body.email,
+                city: req.body.city,
               },
               err => {
                 if (err) console.log(err);
-                return res.status(500).send({ message: 'Internal server error, the user ' });
+                return res.status(500).send({ message: 'Internal server error, an error occured while updated the user' });
               }
             );
-            return res.status(200).send(user);
+            return res.status(200).send({
+              username: req.body.username,
+              firstname: req.body.firstname,
+              lastname: req.body.lastname,
+              age: req.body.age,
+              email: req.body.email,
+              city: req.body.city,
+            });
           }
-          return res.status(500).send({ message: 'Internal server error, the user ' });
+          return res.status(500).send({ message: 'Internal server error, not enough information to update' });
         }
       }
     );

@@ -36,34 +36,34 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    required: true,
+    required: false,
     value: [MEMBERS, ADMINS],
     default: MEMBERS
   },
   firstname: {
     type: String,
-    required: true,
+    required: false,
     minlength: 8,
     maxlength: 254,
     select: false
   },
   lastname: {
     type: String,
-    required: true,
+    required: false,
     minlength: 8,
     maxlength: 254,
     select: false
   },
   city: {
     type: String,
-    required: true,
+    required: false,
     minlength: 8,
     maxlength: 254,
     select: false
   },
   age: {
     type: String,
-    required: true,
+    required: false,
     minlength: 8,
     maxlength: 254,
     select: false
