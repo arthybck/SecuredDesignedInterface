@@ -39,6 +39,7 @@
 
                     android:textColor="@color/colorWhite"/>
                 <EditText
+                    android:id="@+id/lastname"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:paddingLeft="10dp"
@@ -63,6 +64,7 @@
                     android:layout_marginLeft="5dp"
                     android:textColor="@color/colorWhite"/>
                 <EditText
+                    android:id="@+id/firstname"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:paddingLeft="10dp"
@@ -83,6 +85,7 @@
             />
 
         <EditText
+            android:id="@+id/email"
             android:layout_width="fill_parent"
             android:layout_height="30dp"
             android:background="@drawable/rounded_edittext"
@@ -102,6 +105,7 @@
             />
 
         <EditText
+            android:id="@+id/age"
             android:layout_width="fill_parent"
             android:layout_height="30dp"
             android:background="@drawable/rounded_edittext"
@@ -121,6 +125,7 @@
             />
 
         <EditText
+            android:id="@+id/city"
             android:layout_width="fill_parent"
             android:layout_height="30dp"
             android:background="@drawable/rounded_edittext"

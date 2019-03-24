@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
         itemUsers = new ArrayList<>();
 
-        RequestGetAlbums loginRequest = new RequestGetAlbums();
+        RequestGetUser loginRequest = new RequestGetUser();
         try {
             if (loginRequest.execute("http://10.0.2.2:3080/users").get() == "Error") {
                 Log.e("error loginrequest", "Error");
@@ -99,7 +99,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private class RequestGetAlbums extends AsyncTask<String, String, String> {
+    private class RequestGetUser extends AsyncTask<String, String, String> {
 
         protected String doInBackground(String... params) {
             HttpURLConnection connection = null;
