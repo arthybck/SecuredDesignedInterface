@@ -18,12 +18,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
     unique: true,
     required: true,
+    maxlength: 4,
     maxlength: 254
   },
   email: {
     type: String,
     unique: true,
     required: true,
+    maxlength: 8,
     maxlength: 254,
     trim: true
   },
@@ -57,15 +59,15 @@ const UserSchema = new mongoose.Schema({
   city: {
     type: String,
     required: false,
-    minlength: 8,
+    minlength: 2,
     maxlength: 254,
     select: false
   },
   age: {
     type: String,
     required: false,
-    minlength: 8,
-    maxlength: 254,
+    minlength: 2,
+    maxlength: 12,
     select: false
   }
 });
