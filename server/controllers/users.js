@@ -6,32 +6,75 @@
  * @Last modified time: 2019-03-03T17:48:09+01:00
  */
 
-"use strict";
+'use strict';
 
-const User = require("../models/users.js");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const secret = "mysecret";
+const User = require('../models/users.js');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const secret = 'mysecret';
 
-const MEMBERS = "Members";
-const ADMINS = "Admins";
+const MEMBERS = 'Members';
+const ADMINS = 'Admins';
 
+// This method is used to create a user in the database
+exports.registerUser = (req, res) => {
+  const {
+    username,
+    email,
+    password,
+    firstname,
+    lastname,
+    age,
+    city
+  } = req.body;
+  if (!req || !username || !password || !email)
+    return res.status(400).send('Bad Request');
+  else {
+    // Here we hash the password so it is not crystal clear to decode it
+    bcrypt.hash(password, 8, async (err, hashedPassword) => {
+      const user = {
+        username: username,
+        email: email,
+        password: hashedPassword,
+        firstname: firstname ? firstname : 'aaaaaaaaa',
+        lastname: lastname ? lastname : 'aaaaaaaaa',
+        age: age ? age : 'aaaaaaaaa',
+        city: city ? city : 'aaaaaaaaa'
+      };
+      // We create the user using the mongoose model
+      await User.create(user, (err, data) => {
+        if (err) {
+          return res
+            .status(500)
+            .send({ message: 'Internal Server Error', data: err });
+        } else {
+          delete user.password;
+          return res.status(200).send({
+            message: `User ${username} successfully created`,
+            data: data
+          });
+        }
+      });
+    });
+  }
+};
+
+// This method is used to login a user. we check his credentials
+// and provide a token so he can use the rest of the API functionnality
 exports.logUser = (req, res) => {
-  if (!req.body.username || !req.body.password) {
-    return res.status(400).send("Bad Request");
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).send('Bad Request');
   }
   User.findOne(
     {
-      username: req.body.username
+      username: username
     },
     async (err, user) => {
-      if (err) return res.status(500).send("Internal Server Error");
-      if (!user) return res.status(404).send("Not Found");
+      if (err) return res.status(500).send('Internal Server Error');
+      if (!user) return res.status(404).send('Not Found');
 
-      let passwordIsValid = await bcrypt.compare(
-        req.body.password,
-        user.password
-      );
+      let passwordIsValid = await bcrypt.compare(password, user.password);
       if (passwordIsValid) {
         let token = jwt.sign(
           {
@@ -46,145 +89,116 @@ exports.logUser = (req, res) => {
           auth: true,
           token: token
         });
-      } else return res.status(404).send("Not Found");
+      } else return res.status(404).send('Not Found');
     }
-  ).select("password");
+  ).select('password');
 };
 
-exports.registerUser = (req, res) => {
-  console.log(req.body);
-  if (!req || !req.body.username || !req.body.password || !req.body.email)
-    return res.status(400).send("Bad Request");
-  else {
-    bcrypt.hash(req.body.password, 8, async (err, hashedPassword) => {
-      await User.create(
-        {
-          username: req.body.username,
-          email: req.body.email,
-          password: hashedPassword
-        },
-        err => {
-          if (err) return res.status(500).send("Internal Server Error");
-          else return res.status(200).send("Created");
-        }
-      );
-    });
-  }
-};
-
+// This method is used to reset a user's password
 exports.passwordReset = (req, res) => {
-  if (!req || !req.body.email || !req.body.password)
-    return res.status(400).send("Bad Request");
+  const { email, password } = req.body;
+  if (!req || !email || !password) return res.status(400).send('Bad Request');
   else {
-    bcrypt.hash(req.body.password, 8, async (err, hashedPassword) => {
+    bcrypt.hash(password, 8, async (err, hashedPassword) => {
       await User.findOneAndUpdate(
-        { email: req.body.email },
+        { email: email },
         { $set: { password: hashedPassword } },
         err => {
-          if (err) return res.status(500).send("Internal Server Error");
-          else return res.status(200).send("Created");
+          if (err) return res.status(500).send('Internal Server Error');
+          else return res.status(200).send('Created');
         }
       );
     });
   }
 };
 
+// This method is used to get all the users from the db
 exports.getUsers = async (req, res) => {
   if (!req || !req.user || !req.user.userId) {
-    return res.status(400).send("Bad Request");
+    return res.status(400).send('Bad Request');
   } else {
-    await User.find({}, (err, users) => {
-      if (err) return res.status(500).send("Internal Server Error");
-      else return res.status(200).send(users);
-    });
+    // Find all user documents in the database and returning it including
+    // the fields specified as a second parameter
+    await User.find(
+      {},
+      'username firstname lastname city age role email',
+      (err, users) => {
+        if (err) return res.status(500).send('Internal Server Error');
+        else return res.status(200).send(users);
+      }
+    );
   }
 };
 
-// exports.getAdmins = async (req, res) => {
-//   if (!req || !req.user) return res.status(400).send("Bad Request");
-//   else {
-//     await User.find(
-//       {
-//         role: ADMINS
-//       },
-//       (err, users) => {
-//         if (err) return res.status(500).send("Internal Server Error");
-//         else {
-//           return res.status(200).send(users);
-//         }
-//       }
-//     );
-//   }
-// };
+// This method is used to return a specific user from the db
+exports.getUser = async (req, response) => {
+  const { userId } = req.user;
 
-// exports.getMembers = async (req, res) => {
-//   if (!req || !req.user) return res.status(400).send("Bad Request");
-//   else {
-//     await User.find(
-//       {
-//         role: MEMBERS
-//       },
-//       (err, users) => {
-//         if (err) return res.status(500).send("Internal Server Error");
-//         else {
-//           return res.status(200).send(users);
-//         }
-//       }
-//     );
-//   }
-// };
-
-exports.getUser = async (req, res) => {
-  if (!req || !req.user || !req.user.userId)
-    return res.status(400).send("Bad Request");
+  if (!req || !req.user || !userId)
+    return response.status(400).send('Bad Request');
   else {
-    await User.findById(
-      {
-        _id: req.user.userId
-      },
+    // Find the user find :userId in the database and return it
+    // including  the fields specified as a second parameter
+    await User.findOne(
+      { _id: userId },
+      'username firstname lastname city age role email',
       (err, user) => {
-        if (err) return res.status(500).send("Internal Server Error");
-        else return res.status(200).send(user);
+        if (err) return response.status(500).send('Internal Server Error');
+        else return response.status(200).send(user);
       }
     );
   }
 };
 
-// TODO: fix the async problem in the response body of the request
-exports.putUser = async (req, res) => {
-  if (!req || !req.user || !req.user.userId)
-    return res.status(400).send("Bad Request");
+// This method is used to update a user fields
+exports.putUser = async (req, response) => {
+  const { username, email, firstname, lastname, age, city } = req.body;
+  const { userId } = req.user;
+
+  if (!req || !req.user || !userId)
+    return response.status(400).send('Bad Request');
   else {
-    await User.findById({ _id: req.body.id },
-      async (err, user) => {
-        if (err) return res.status(500).send("Internal Server Error");
-        if (!user) return res.status(404).send("Not Found");
+    // We require all the fields to be in the body
+    if (req.body && username && firstname && lastname && age && email && city) {
+      const userData = {
+        username: username,
+        firstname: firstname,
+        lastname: lastname,
+        age: age,
+        email: email,
+        city: city
+      };
+      await User.findById({ _id: userId }, async (err, user) => {
+        if (err)
+          return response
+            .status(500)
+            .send({ message: 'Internal Server Error', error: err });
+        if (!user) return response.status(404).send('User not Found');
         else {
-          if (req.body && req.body.username && req.body.firstname && req.body.lastname && req.body.age && req.body.email && req.body.city) {
-            await user.update(
-              {
-                $set: {
-                  username: req.body.username,
-                  firstname: req.body.firstname,
-                  lastname: req.body.lastname,
-                  age: req.body.age,
-                  email: req.body.email,
-                  city: req.body.city,
-                }
-              }
-            );
-            return res.status(200).send({
-              username: req.body.username,
-              firstname: req.body.firstname,
-              lastname: req.body.lastname,
-              age: req.body.age,
-              email: req.body.email,
-              city: req.body.city,
-            });
-          }
-          return res.status(500).send({ message: 'Internal server error, not enough information to update' });
+          await User.updateOne(
+            { _id: userId },
+            {
+              $set: userData
+            }
+          ).then(result => {
+            if (result.nModified > 0) {
+              return response.status(200).send({
+                message: `User ${username} successfully updated.`,
+                data: userData
+              });
+            } else {
+              return response.status(200).send({
+                message: `No data needed to be udpated for the user ${username}`,
+                data: userData
+              });
+            }
+          });
         }
-      }
-    );
+      });
+    } else {
+      return res.status(500).send({
+        message: 'Internal server error, not enough information to update'
+      });
+    }
   }
 };
