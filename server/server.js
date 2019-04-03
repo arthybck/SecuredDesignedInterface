@@ -98,6 +98,16 @@ function routerConfiguration(app) {
     });
   });
 
+  //Reset password     --- POST
+  router
+    .route('/reset')
+    .post(
+      logBuilder.myLogger,
+      authController.isAuthenticated,
+      authController.isMembers,
+      userController.passwordReset
+    );
+
   app.use(router);
 }
 

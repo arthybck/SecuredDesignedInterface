@@ -50,17 +50,16 @@ exports.registerUser = (req, res) => {
               .status(409)
               .send({ message: 'User already exist.', data: err });
           }
-          return res
-            .status(500)
-            .send({
-              message: 'Internal Server Error, malformatted data',
-              data: err
-            });
+          return res.status(500).send({
+            message: 'Internal Server Error, malformatted data',
+            data: err
+          });
         } else {
           delete user.password;
+          user._id = data._id;
           return res.status(200).send({
             message: `User ${username} successfully created`,
-            data: data
+            data: user
           });
         }
       });
@@ -114,7 +113,7 @@ exports.passwordReset = (req, res) => {
         { $set: { password: hashedPassword } },
         err => {
           if (err) return res.status(500).send('Internal Server Error');
-          else return res.status(200).send('Created');
+          else return res.status(200).send('Password successfully updated');
         }
       );
     });
