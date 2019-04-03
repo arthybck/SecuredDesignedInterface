@@ -6,19 +6,19 @@
  * @Last modified time: 2019-03-03T17:39:09+01:00
  */
 
-import React from "react";
-import { withStyles } from "@material-ui/core";
+import React from 'react';
+import { withStyles } from '@material-ui/core';
 
-import AppBar from "@material-ui/core/AppBar";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
+import AppBar from '@material-ui/core/AppBar';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
 
-import { login } from "../commons";
+import { login } from '../../modules/commons';
 
 const styles = {
   button: {}
@@ -28,8 +28,8 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
-      password: ""
+      username: '',
+      password: ''
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -37,11 +37,13 @@ class Login extends React.Component {
   handleClick = () => {
     const { username, password } = this.state;
     const { handleLogin } = this.props;
-    login({ username, password }).then(() => {
-      handleLogin('ok');
-    }).catch(() => {
-      handleLogin('error')
-    });
+    login({ username, password })
+      .then(() => {
+        handleLogin('ok');
+      })
+      .catch(() => {
+        handleLogin('error');
+      });
   };
 
   handleChange = name => e => {
@@ -56,34 +58,34 @@ class Login extends React.Component {
     return (
       <Grid
         container
-        justify="space-around"
-        alignItems="center"
-        alignContent="space-around"
+        justify='space-around'
+        alignItems='center'
+        alignContent='space-around'
       >
         <Grid item xs={10}>
           <TextField
-            id="outlined-username"
-            label="username"
+            id='outlined-username'
+            label='username'
             className={classes.textField}
             value={this.state.username}
-            onChange={this.handleChange("username")}
-            margin="normal"
-            variant="outlined"
+            onChange={this.handleChange('username')}
+            margin='normal'
+            variant='outlined'
           />
         </Grid>
         <Grid item xs={10}>
           <TextField
-            id="outlined-password"
-            label="password"
+            id='outlined-password'
+            label='password'
             className={classes.textField}
             value={this.state.password}
-            onChange={this.handleChange("password")}
-            margin="normal"
-            variant="outlined"
+            onChange={this.handleChange('password')}
+            margin='normal'
+            variant='outlined'
           />
         </Grid>
         <Grid item xs={10}>
-          <Button fullWidth variant="outlined" onClick={this.handleClick}>
+          <Button fullWidth variant='outlined' onClick={this.handleClick}>
             <Typography>Submit</Typography>
           </Button>
         </Grid>

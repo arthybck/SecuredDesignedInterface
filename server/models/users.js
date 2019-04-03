@@ -6,12 +6,12 @@
  * @Last modified time: 2019-02-05T19:43:41+01:00
  */
 
-"use strict";
+'use strict';
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const MEMBERS = "Members";
-const ADMINS = "Admins";
+const MEMBERS = 'Members';
+const ADMINS = 'Admins';
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -45,31 +45,23 @@ const UserSchema = new mongoose.Schema({
   firstname: {
     type: String,
     required: false,
-    minlength: 8,
-    maxlength: 254,
     select: false
   },
   lastname: {
     type: String,
     required: false,
-    minlength: 8,
-    maxlength: 254,
     select: false
   },
   city: {
     type: String,
     required: false,
-    minlength: 2,
-    maxlength: 254,
     select: false
   },
   age: {
     type: String,
     required: false,
-    minlength: 2,
-    maxlength: 12,
     select: false
   }
 });
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model('User', UserSchema);

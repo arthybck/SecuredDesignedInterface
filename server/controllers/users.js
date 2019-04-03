@@ -36,17 +36,26 @@ exports.registerUser = (req, res) => {
         username: username,
         email: email,
         password: hashedPassword,
-        firstname: firstname ? firstname : 'aaaaaaaaa',
-        lastname: lastname ? lastname : 'aaaaaaaaa',
-        age: age ? age : 'aaaaaaaaa',
-        city: city ? city : 'aaaaaaaaa'
+        firstname: firstname ? firstname : '',
+        lastname: lastname ? lastname : '',
+        age: age ? age : '',
+        city: city ? city : ''
       };
       // We create the user using the mongoose model
       await User.create(user, (err, data) => {
         if (err) {
+          console.log(err);
+          if (err.code === 11000) {
+            return res
+              .status(409)
+              .send({ message: 'User already exist.', data: err });
+          }
           return res
             .status(500)
-            .send({ message: 'Internal Server Error', data: err });
+            .send({
+              message: 'Internal Server Error, malformatted data',
+              data: err
+            });
         } else {
           delete user.password;
           return res.status(200).send({
