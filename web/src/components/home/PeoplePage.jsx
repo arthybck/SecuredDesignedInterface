@@ -6,11 +6,11 @@
  * @Last modified time: 2019-03-03T17:14:01+01:00
  */
 
-import React from "react";
+import React from 'react';
 
-import Grid from "@material-ui/core/Grid";
+import Grid from '@material-ui/core/Grid';
 
-import PeopleList from "./PeopleList";
+import PeopleList from './PeopleList';
 
 /**
  * PeoplePage - The top-level component at /people
@@ -18,10 +18,12 @@ import PeopleList from "./PeopleList";
  */
 class PeoplePage extends React.Component {
   render() {
+    const { token } = this.props;
+
     return (
-      <Grid container justify="center" alignItems="center">
+      <Grid container justify='center' alignItems='center'>
         <Grid item xs={12} sm={10}>
-          <PeopleList />
+          <PeopleList token={token} />
         </Grid>
       </Grid>
     );

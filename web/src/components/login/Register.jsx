@@ -24,6 +24,9 @@ import amber from '@material-ui/core/colors/amber';
 import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const styles = theme => ({
   success: {
@@ -48,6 +51,10 @@ const styles = theme => ({
   message: {
     display: 'flex',
     alignItems: 'center'
+  },
+  fields: {
+    width: 300,
+    margin: theme.spacing.unit
   }
 });
 
@@ -58,7 +65,8 @@ class Register extends React.Component {
       username: '',
       email: '',
       password: '',
-      open: false
+      open: false,
+      showPassword: true
     };
   }
 
@@ -70,8 +78,7 @@ class Register extends React.Component {
       .then(res => {
         handleLogin('ok');
       })
-      .catch(() => {
-        console.log('error gros');
+      .catch(err => {
         this.setState({ open: true });
         handleLogin('error');
       });
@@ -90,16 +97,20 @@ class Register extends React.Component {
     this.setState({ open: false });
   };
 
+  handleClickShowPassword = () => {
+    this.setState(state => ({ showPassword: !state.showPassword }));
+  };
+
   render() {
     const { classes } = this.props;
 
     return (
       <Grid container>
-        <Grid item>
+        <Grid item className={classes.textField}>
           <TextField
             id='outlined-email'
             label='email'
-            className={classes.textField}
+            className={classes.fields}
             value={this.state.email}
             onChange={this.handleChange('email')}
             margin='normal'
@@ -110,7 +121,7 @@ class Register extends React.Component {
           <TextField
             id='outlined-username'
             label='username'
-            className={classes.textField}
+            className={classes.fields}
             value={this.state.username}
             onChange={this.handleChange('username')}
             margin='normal'
@@ -121,22 +132,46 @@ class Register extends React.Component {
           <TextField
             id='outlined-password'
             label='password'
-            className={classes.textField}
+            className={classes.fields}
+            type={this.state.showPassword ? 'password' : 'text'}
             value={this.state.password}
             onChange={this.handleChange('password')}
             margin='normal'
             variant='outlined'
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <IconButton
+                    aria-label='Toggle password visibility'
+                    onClick={this.handleClickShowPassword}
+                  >
+                    {this.state.showPassword ? (
+                      <VisibilityOff />
+                    ) : (
+                      <Visibility />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
           />
         </Grid>
+
         <Grid item>
-          <Button onClick={this.handleClick}>
-            <Typography>Submit</Typography>
+          <Button
+            onClick={this.handleClick}
+            color='primary'
+            variant='contained'
+            className={classes.fields}
+          >
+            <Typography style={{ color: 'white' }}>Submit</Typography>
           </Button>
         </Grid>
+
         <Snackbar
           anchorOrigin={{
             vertical: 'top',
-            horizontal: 'right'
+            horizontal: 'center'
           }}
           open={this.state.open}
           autoHideDuration={6000}

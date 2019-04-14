@@ -27,9 +27,9 @@ exports.registerUser = (req, res) => {
     age,
     city
   } = req.body;
-  if (!req || !username || !password || !email)
+  if (!req || !username || !password || !email) {
     return res.status(400).send('Bad Request');
-  else {
+  } else {
     // Here we hash the password so it is not crystal clear to decode it
     bcrypt.hash(password, 8, async (err, hashedPassword) => {
       const user = {
@@ -44,7 +44,6 @@ exports.registerUser = (req, res) => {
       // We create the user using the mongoose model
       await User.create(user, (err, data) => {
         if (err) {
-          console.log(err);
           if (err.code === 11000) {
             return res
               .status(409)
@@ -122,7 +121,7 @@ exports.passwordReset = (req, res) => {
 
 // This method is used to get all the users from the db
 exports.getUsers = async (req, res) => {
-  if (!req || !req.user || !req.user.userId) {
+  if (!req) {
     return res.status(400).send('Bad Request');
   } else {
     // Find all user documents in the database and returning it including

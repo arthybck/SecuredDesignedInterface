@@ -6,18 +6,26 @@
  * @Last modified time: 2019-03-03T17:20:50+01:00
  */
 
-import React from "react";
+import React from 'react';
 
-import Grid from "@material-ui/core/Grid";
+import Grid from '@material-ui/core/Grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
-import PeopleItem from "./PeopleItem";
+import PeopleItem from './PeopleItem';
+import { listUsers } from '../../modules/commons';
 
-// faire ma requête ici et la foutre dans une variable result
+const styles = theme => ({
+  progress: {
+    margin: theme.spacing.unit * 2
+  }
+});
 
 /**
  * PeopleList - This functional component return a list of all users with some informations
  *
- * @param {array}  [results=[]]    The result of the query made to the user collection
+ * @param {array}  [users=[]]    The result of the query made to the user collection
  * @param {true}   loadMore        Used to load more users from graphql
  * @param {number}   count         The number of users in the collection currently loaded
  * @param {number}   totalCount    The total number user loaded from graphql
@@ -25,14 +33,56 @@ import PeopleItem from "./PeopleItem";
  *
  * @returns {element} The element returned by the component
  */
-const PeopleList = ({ results =[], classes }) => {
-  return (
-    <Grid container justify="space-around" alignItems="center">
-      {results.map(user => (
-        <PeopleItem key={user.username} user={user} />
-      ))}
-    </Grid>
-  );
+class PeopleList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [],
+      loading: true,
+      completed: 0
+    };
+    const { token } = this.props;
+
+    listUsers(token).then(res => {
+      console.log(res.data);
+      this.setState({ users: res.data, loading: false });
+    });
+  }
+
+  componentDidMount() {
+    this.timer = setInterval(this.progress, 20);
+  }
+
+  progress = () => {
+    const { completed } = this.state;
+    this.setState({ completed: completed >= 100 ? 0 : completed + 1 });
+  };
+
+  render() {
+    const { users, loading } = this.state;
+    const { classes } = this.props;
+    return (
+      <Grid
+        container
+        justify='space-around'
+        alignItems='center'
+        style={{ paddingTop: 100 }}
+      >
+        {!loading
+          ? users.map(user => <PeopleItem key={user.username} user={user} />)
+          : null}
+        <CircularProgress
+          className={classes.progress}
+          variant='determinate'
+          value={this.state.completed}
+        />
+      </Grid>
+    );
+  }
+}
+
+PeopleList.propTypes = {
+  classes: PropTypes.object.isRequired
 };
 
-export default PeopleList;
+export default withStyles(styles)(PeopleList);

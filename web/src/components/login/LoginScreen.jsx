@@ -11,14 +11,11 @@ import { withStyles } from '@material-ui/core';
 
 import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import Snackbar from '@material-ui/core/Snackbar';
-import CloseIcon from '@material-ui/icons/Close';
 
 import logo from '../../static/logo.jpeg';
 import Login from './Login';
@@ -26,12 +23,20 @@ import PeoplePage from '../home/PeoplePage';
 
 import Register from './Register';
 
-const styles = {
+const styles = theme => ({
   menuButton: {
     marginLeft: -12,
     marginRight: 20
+  },
+  switchButton: {
+    margin: theme.spacing.unit,
+    width: 300,
+    backgroundColor: '#1abc9c',
+    '&:hover': {
+      backgroundColor: '#16a085'
+    }
   }
-};
+});
 
 class LoginScreen extends React.Component {
   constructor(props) {
@@ -39,7 +44,8 @@ class LoginScreen extends React.Component {
     this.state = {
       button: false,
       login: false,
-      badCreds: false
+      badCreds: false,
+      token: null
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
@@ -57,12 +63,12 @@ class LoginScreen extends React.Component {
     this.setState({ badCreds: false });
   };
 
-  handleLogin(status) {
+  handleLogin(token) {
     const { login } = this.state;
-    if (status === 'ok') {
-      let tmp = !login;
+    if (token !== 'error') {
       this.setState({
-        login: tmp
+        login: !login,
+        token: token
       });
     } else {
       this.setState({
@@ -73,19 +79,13 @@ class LoginScreen extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { button, login } = this.state;
+    const { button, login, token } = this.state;
+
     return (
       <Grid container>
         <Grid item xs={12}>
-          <AppBar>
+          <AppBar style={{ backgroundColor: '#2c3e50' }}>
             <Toolbar>
-              <IconButton
-                className={classes.menuButton}
-                color='inherit'
-                aria-label='Menu'
-              >
-                <MenuIcon />
-              </IconButton>
               <Typography variant='h6' color='inherit' className={classes.grow}>
                 SoSecured
               </Typography>
@@ -109,7 +109,7 @@ class LoginScreen extends React.Component {
               alignContent='center'
               style={{
                 backgroundColor: '#353537',
-                paddingTop: '30%',
+                paddingTop: '20%',
                 paddingBottom: '20%'
               }}
             >
@@ -122,9 +122,12 @@ class LoginScreen extends React.Component {
                 }}
               />
             </Grid>
-            <Grid item xs={11} md={3}>
-              {button ? (
-                <Login handleLogin={this.handleLogin} />
+            <Grid item xs={12} md={4}>
+              {!button ? (
+                <Login
+                  handleLogin={this.handleLogin}
+                  sendToken={this.sendToken}
+                />
               ) : (
                 <Register handleLogin={this.handleLogin} />
               )}
@@ -137,13 +140,18 @@ class LoginScreen extends React.Component {
                 <Grid item xs={12}>
                   <Button
                     fullWidth
-                    variant='outlined'
+                    variant='contained'
                     onClick={this.handleClick}
+                    className={classes.switchButton}
                   >
-                    {button ? (
-                      <Typography>Register</Typography>
+                    {!button ? (
+                      <Typography style={{ color: 'white' }}>
+                        Not registered ?
+                      </Typography>
                     ) : (
-                      <Typography>Login</Typography>
+                      <Typography style={{ color: 'white' }}>
+                        Login page
+                      </Typography>
                     )}
                   </Button>
                 </Grid>
@@ -151,42 +159,8 @@ class LoginScreen extends React.Component {
             </Grid>
           </Grid>
         ) : (
-          <PeoplePage />
+          <PeoplePage token={token} />
         )}
-        <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left'
-          }}
-          open={this.state.badCreds}
-          autoHideDuration={6000}
-          onClose={this.handleClose}
-          ContentProps={{
-            'aria-describedby': 'message-id'
-          }}
-          message={
-            <span id='message-id'>Please verify your username/password</span>
-          }
-          action={[
-            <Button
-              key='undo'
-              color='secondary'
-              size='small'
-              onClick={this.handleClose}
-            >
-              Close
-            </Button>,
-            <IconButton
-              key='close'
-              aria-label='Close'
-              color='inherit'
-              className={classes.close}
-              onClick={this.handleClose}
-            >
-              <CloseIcon />
-            </IconButton>
-          ]}
-        />
       </Grid>
     );
   }

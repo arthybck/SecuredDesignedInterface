@@ -9,39 +9,64 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core';
 
-import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import classNames from 'classnames';
+
+import ErrorIcon from '@material-ui/icons/Error';
+import CloseIcon from '@material-ui/icons/Close';
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 
 import { login } from '../../modules/commons';
 
-const styles = {
-  button: {}
-};
+const styles = theme => ({
+  error: {
+    backgroundColor: theme.palette.error.dark
+  },
+  icon: {
+    fontSize: 20
+  },
+  iconVariant: {
+    opacity: 0.9,
+    marginRight: theme.spacing.unit
+  },
+  fields: {
+    width: 300,
+    margin: theme.spacing.unit
+  }
+});
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      credentialError: false
     };
     this.handleChange = this.handleChange.bind(this);
   }
 
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    this.setState({ credentialError: false });
+  };
+
   handleClick = () => {
     const { username, password } = this.state;
-    const { handleLogin } = this.props;
+    const { handleLogin, sendToken } = this.props;
     login({ username, password })
-      .then(() => {
-        handleLogin('ok');
+      .then(res => {
+        handleLogin(res.data.token);
       })
       .catch(() => {
+        this.setState({ credentialError: true });
         handleLogin('error');
       });
   };
@@ -54,41 +79,76 @@ class Login extends React.Component {
 
   render() {
     const { classes } = this.props;
-
     return (
-      <Grid
-        container
-        justify='space-around'
-        alignItems='center'
-        alignContent='space-around'
-      >
-        <Grid item xs={10}>
+      <Grid container>
+        <Grid item>
           <TextField
             id='outlined-username'
             label='username'
-            className={classes.textField}
+            className={classes.fields}
             value={this.state.username}
             onChange={this.handleChange('username')}
             margin='normal'
             variant='outlined'
           />
         </Grid>
-        <Grid item xs={10}>
+        <Grid item>
           <TextField
             id='outlined-password'
             label='password'
-            className={classes.textField}
+            className={classes.fields}
             value={this.state.password}
             onChange={this.handleChange('password')}
             margin='normal'
+            type='password'
             variant='outlined'
           />
         </Grid>
-        <Grid item xs={10}>
-          <Button fullWidth variant='outlined' onClick={this.handleClick}>
-            <Typography>Submit</Typography>
+        <Grid item>
+          <Button
+            fullWidth
+            color='primary'
+            variant='contained'
+            onClick={this.handleClick}
+            className={classes.fields}
+          >
+            <Typography style={{ color: 'white' }}>Submit</Typography>
           </Button>
         </Grid>
+
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center'
+          }}
+          open={this.state.credentialError}
+          autoHideDuration={6000}
+          onClose={this.handleClose}
+        >
+          <SnackbarContent
+            className={classes.error}
+            aria-describedby='client-snackbar'
+            message={
+              <span id='client-snackbar' className={classes.message}>
+                <ErrorIcon
+                  className={classNames(classes.icon, classes.iconVariant)}
+                />
+                Please check you password/username and try again
+              </span>
+            }
+            action={[
+              <IconButton
+                key='close'
+                aria-label='Close'
+                color='inherit'
+                className={classes.close}
+                onClick={this.handleClose}
+              >
+                <CloseIcon className={classes.icon} />
+              </IconButton>
+            ]}
+          />
+        </Snackbar>
       </Grid>
     );
   }

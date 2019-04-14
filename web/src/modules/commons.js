@@ -17,35 +17,38 @@ export const register = ({ email, username, password }) =>
     data: { email, username, password }
   })
     .then(result => {
-      console.log(result);
       const res = result.data.data;
       console.log(res);
       return res;
     })
     .catch(err => {
-      console.log(err);
-      return err;
+      throw err;
     });
 
 export const login = ({ username, password }) =>
-  axios
-    .post(
-      `${url}login`,
-      {
-        username,
-        password
-      },
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }
-    )
+  axios({
+    method: 'POST',
+    url: `${url}login`,
+    data: { username, password }
+  })
     .then(result => {
-      const res = result.data.results;
-      console.log('login -> ', res);
-      return res;
+      return result;
+    })
+    .catch(err => {
+      throw err;
+    });
+
+export const listUsers = token =>
+  axios({
+    method: 'GET',
+    url: `${url}users`,
+    headers: { 'x-access-token': token }
+  })
+    .then(result => {
+      console.log(result);
+      return result;
     })
     .catch(err => {
       console.log(err);
+      throw err;
     });
