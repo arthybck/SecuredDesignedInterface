@@ -71,11 +71,24 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Users dataModel= itemUsers.get(position);
-                TextView txtclose;
-                TextView username;
+
+                TextView txtclose, username, userDate, userEmail, userCity;
+
                 final Dialog myDialog = new Dialog(view.getContext());
                 myDialog.setContentView(R.layout.custom_popup);
                 txtclose = myDialog.findViewById(R.id.textclose);
+                userDate = myDialog.findViewById(R.id.age);
+                userEmail = myDialog.findViewById(R.id.email);
+                userCity = myDialog.findViewById(R.id.city);
+                if (dataModel.getCity() != null) {
+                    userCity.setText(dataModel.getCity());
+                }
+                if (dataModel.getAge() != null) {
+                    userDate.setText(dataModel.getAge());
+                }
+                if (dataModel.getEmail() != null) {
+                    userEmail.setText(dataModel.getEmail());
+                }
                 username = myDialog.findViewById(R.id.username);
                 username.setText(dataModel.getUsername());
                 txtclose.setOnClickListener(new View.OnClickListener() {
@@ -138,14 +151,17 @@ public class HomeFragment extends Fragment {
                 JSONArray jsonArray = new JSONArray(response.toString());
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonobject = jsonArray.getJSONObject(i);
-                    Users user = new Users(jsonobject.get("username").toString(), jsonobject.get("email").toString(), jsonobject.get("_id").toString());
+                    Users user;
+                    if (jsonobject.has("city") && jsonobject.has("age")) {
+                        user = new Users(jsonobject.get("username").toString(), jsonobject.get("email").toString(), jsonobject.get("_id").toString(), jsonobject.get("age").toString(), jsonobject.get("city").toString());
+                    } else {
+                        user = new Users(jsonobject.get("username").toString(), jsonobject.get("email").toString(), jsonobject.get("_id").toString());
+                    }
                     Log.e("user ->", user.getEmail() + " " + user.getUserId());
                     itemUsers.add(user);
                 }
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             } finally {
                 if (connection != null) {

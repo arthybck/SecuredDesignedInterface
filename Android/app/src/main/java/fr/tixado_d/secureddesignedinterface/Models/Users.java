@@ -15,6 +15,15 @@ public class Users {
         this.userId = userId;
     }
 
+    public Users(String username, String email, String userId, String age, String city) {
+        this.username = username;
+        this.email = email;
+        this.userId = userId;
+        this.age = age;
+        this.city = city;
+    }
+
+
     public String getUsername() {
         return username;
     }
