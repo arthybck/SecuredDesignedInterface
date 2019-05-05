@@ -1,3 +1,16 @@
+/**
+ * @Author: Arthur Brunck <arthybck>
+ * @Date:   2018-10-27T15:47:50+02:00
+ * @Email:  arthurbrunckpro@gmail.com
+ * @Filename: logger.js
+ * @Last modified by:   arthybck
+ * @Last modified time: 2018-10-27T20:13:19+02:00
+ */
+
+'use strict';
+
+// Here this function will be used on the server as
+// a middelware to display all the transactions
 exports.myLogger = (req, res, next) => {
     const method = req.method;
     const url = req.url;

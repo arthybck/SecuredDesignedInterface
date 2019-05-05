@@ -1,7 +1,7 @@
 /**
  * @Author: Arthur Brunck <arthybck>
  * @Date:   2019-01-22T11:14:16+01:00
- * @Filename: jwt.js
+ * @Filename: blacklist.js
  * @Last modified by:   arthybck
  * @Last modified time: 2019-03-03T17:48:09+01:00
  */
@@ -10,6 +10,8 @@
 
 const Blacklist = require('../models/blacklist.js');
 
+
+// This function add a token to the blacklisted DB
 exports.addTokenToBlacklist = (token) => {
     console.log('add this token to blacklist:', token);
     const tokenObj = { token };
@@ -23,6 +25,7 @@ exports.addTokenToBlacklist = (token) => {
     });
 }
 
+// This function check if a token has been blacklisted and will return a status 401 if needed
 exports.checkBlacklist = async (req, res, next) => {
     let token = req.headers["x-access-token"];
     await Blacklist.findOne(

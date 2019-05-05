@@ -12,6 +12,7 @@ const url = 'http://localhost:3080/';
 
 let userToken = null;
 
+// This function create a user in the database
 export const register = ({ email, username, password }) =>
   axios({
     method: 'POST',
@@ -27,6 +28,9 @@ export const register = ({ email, username, password }) =>
       throw err;
     });
 
+
+// This function check the credentials and return a token
+// the user will be able to use to make request to the db
 export const login = ({ username, password }) =>
   axios({
     method: 'POST',
@@ -42,6 +46,8 @@ export const login = ({ username, password }) =>
       throw err;
     });
 
+
+// This function is used to logout the user
 export const logout = () =>
   axios({
     method: 'POST',
@@ -57,6 +63,7 @@ export const logout = () =>
       throw err;
     });
 
+// This function list all the users from the db
 export const listUsers = token =>
   axios({
     method: 'GET',

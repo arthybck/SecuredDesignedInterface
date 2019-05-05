@@ -13,8 +13,6 @@ const secret = "mysecret";
 const passport = require("passport");
 const CustomStrategy = require("passport-custom");
 
-const User = require("../models/users.js");
-
 const MEMBERS = "Members";
 const ADMINS = "Admins";
 
@@ -32,28 +30,6 @@ passport.use(
     });
   })
 );
-
-exports.isAdmin = async (req, res, forward) => {
-  await User.findOne({ _id: req.user.userId }, (err, user) => {
-    if (err) return res.status(500).send("Something went wrong: " + err);
-    else if (user.role !== ADMINS) {
-      return res.status(401).send("Insufficient permission.");
-    } else {
-      forward();
-    }
-  });
-};
-
-exports.isMembers = async (req, res, forward) => {
-  await User.findOne({ _id: req.user.userId }, (err, user) => {
-    if (err) return res.status(500).send("Something went wrong: " + err);
-    else if (user.role !== ADMINS && user.role !== MEMBERS) {
-      return res.status(401).send("Insufficient permission.");
-    } else {
-      forward();
-    }
-  });
-};
 
 exports.isAuthenticated = passport.authenticate(
   "jwt",

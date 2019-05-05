@@ -180,6 +180,7 @@ exports.putUser = async (req, response) => {
         email: email,
         city: city
       };
+      // Here we fetch the use byId which is faster than a findAll + filter
       await User.findById({ _id: userId }, async (err, user) => {
         if (err)
           return response
@@ -215,17 +216,21 @@ exports.putUser = async (req, response) => {
   }
 };
 
+// This function logout the user, he would be able to use the token to make requests
 exports.logout = (req, res) => {
   console.log('logout')
   if (req && req.headers) {
     const token = req.headers["x-access-token"];
 
+    // Here we add the token to the blacklist in the DB
     blacklist.addTokenToBlacklist(token);
     console.log(blacklist.checkBlacklist(token));
   }
+  // Set the jwt token to false
   passport.authenticate('jwt', {
     session: false
   })
+  // The client only have to take the null value of the token
   res.status(200).send({
     auth: false,
     token: null

@@ -7,16 +7,13 @@
  */
 
 import React from 'react';
-import { withStyles } from '@material-ui/core';
+import classNames from 'classnames';
 
+import { withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-
-import { register } from '../../modules/commons';
-
-import classNames from 'classnames';
 import ErrorIcon from '@material-ui/icons/Error';
 import CloseIcon from '@material-ui/icons/Close';
 import green from '@material-ui/core/colors/green';
@@ -27,6 +24,10 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+
+import { register } from '../../modules/commons';
+
+
 
 const styles = theme => ({
   success: {
@@ -148,8 +149,8 @@ class Register extends React.Component {
                     {this.state.showPassword ? (
                       <VisibilityOff />
                     ) : (
-                      <Visibility />
-                    )}
+                        <Visibility />
+                      )}
                   </IconButton>
                 </InputAdornment>
               )

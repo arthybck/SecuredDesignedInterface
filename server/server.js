@@ -114,6 +114,7 @@ function configApp(app) {
   app.use(bodyParser.json());
   app.use(passport.initialize());
   app.use((req, res, forward) => {
+    // We set some headers to avoid very basics attacks or intrusions
     res.header('Content-Security-Policy', "default-src 'self'");
     res.header('X-Frame-Options', 'SAMEORIGIN');
     res.header('X-XSS-Protection', '1; mode=block');
