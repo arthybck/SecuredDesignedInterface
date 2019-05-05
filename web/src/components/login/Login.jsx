@@ -20,6 +20,9 @@ import ErrorIcon from '@material-ui/icons/Error';
 import CloseIcon from '@material-ui/icons/Close';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { login } from '../../modules/commons';
 
@@ -46,7 +49,9 @@ class Login extends React.Component {
     this.state = {
       username: '',
       password: '',
-      credentialError: false
+      credentialError: false,
+      showPassword: true
+
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -78,6 +83,10 @@ class Login extends React.Component {
     });
   };
 
+  handleClickShowPassword = () => {
+    this.setState(state => ({ showPassword: !state.showPassword }));
+  };
+
   render() {
     const { classes } = this.props;
     return (
@@ -101,8 +110,24 @@ class Login extends React.Component {
             value={this.state.password}
             onChange={this.handleChange('password')}
             margin='normal'
-            type='password'
+            type={this.state.showPassword ? 'password' : 'text'}
             variant='outlined'
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <IconButton
+                    aria-label='Toggle password visibility'
+                    onClick={this.handleClickShowPassword}
+                  >
+                    {this.state.showPassword ? (
+                      <VisibilityOff />
+                    ) : (
+                        <Visibility />
+                      )}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
           />
         </Grid>
         <Grid item>

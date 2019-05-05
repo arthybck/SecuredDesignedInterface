@@ -45,7 +45,7 @@ class PeopleList extends React.Component {
 
     listUsers(token).then(res => {
       console.log(res.data);
-      this.setState({ users: res.data, loading: false });
+      this.setState({ users: res.data, loading: false, completed: 100 });
     });
   }
 
@@ -70,12 +70,11 @@ class PeopleList extends React.Component {
       >
         {!loading
           ? users.map(user => <PeopleItem key={user.username} user={user} />)
-          : null}
-        <CircularProgress
-          className={classes.progress}
-          variant='determinate'
-          value={this.state.completed}
-        />
+          : <CircularProgress
+            className={classes.progress}
+            variant='determinate'
+            value={this.state.completed}
+          />}
       </Grid>
     );
   }

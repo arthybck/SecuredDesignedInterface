@@ -103,7 +103,6 @@ class LoginScreen extends React.Component {
     const { classes } = this.props;
     const { button, login, token, anchorEl } = this.state;
     const open = Boolean(anchorEl);
-
     return (
       <Grid container>
         <Grid item xs={12}>

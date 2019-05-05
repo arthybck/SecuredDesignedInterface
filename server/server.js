@@ -16,6 +16,7 @@ const helmet = require('helmet');
 
 const authController = require('./controllers/auth.js');
 const userController = require('./controllers/users.js');
+const blacklist = require('./controllers/blacklist.js');
 
 const logBuilder = require('./helpers/logger.js');
 
@@ -64,6 +65,7 @@ function routerConfiguration(app) {
     .get(
       logBuilder.myLogger,
       authController.isAuthenticated,
+      blacklist.checkBlacklist,
       userController.getUser
     );
 
@@ -73,6 +75,7 @@ function routerConfiguration(app) {
     .get(
       logBuilder.myLogger,
       authController.isAuthenticated,
+      blacklist.checkBlacklist,
       authController.isMembers,
       userController.getUsers
     )
@@ -93,6 +96,7 @@ function routerConfiguration(app) {
     .post(
       logBuilder.myLogger,
       authController.isAuthenticated,
+      blacklist.checkBlacklist,
       authController.isMembers,
       userController.passwordReset
     );

@@ -11,7 +11,7 @@
 const Blacklist = require('../models/blacklist.js');
 
 exports.addTokenToBlacklist = (token) => {
-    console.log(token);
+    console.log('add this token to blacklist:', token);
     const tokenObj = { token };
     Blacklist.create(tokenObj, (err, data) => {
         console.log(data);
@@ -25,12 +25,11 @@ exports.addTokenToBlacklist = (token) => {
 
 exports.checkBlacklist = async (req, res, next) => {
     let token = req.headers["x-access-token"];
-    Blacklist.findOne(
+    await Blacklist.findOne(
         { token },
-        (err, token) => {
-            console.log(err);
-            console.log(token);
-            if (token) {
+        (err, dbToken) => {
+            console.log("founded token: ", dbToken);
+            if (dbToken) {
                 res.status(401).send({
                     message: 'The user token expired'
                 });

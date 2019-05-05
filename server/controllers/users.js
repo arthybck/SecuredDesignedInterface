@@ -217,7 +217,7 @@ exports.putUser = async (req, response) => {
 
 exports.logout = (req, res) => {
   console.log('logout')
-  if (req && res.headers) {
+  if (req && req.headers) {
     const token = req.headers["x-access-token"];
 
     blacklist.addTokenToBlacklist(token);
