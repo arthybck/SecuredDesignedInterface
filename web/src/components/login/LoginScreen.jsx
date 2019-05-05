@@ -17,9 +17,18 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
+
+import AccountCircle from '@material-ui/icons/AccountCircle';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import FormGroup from '@material-ui/core/FormGroup';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+
+
 import logo from '../../static/logo.jpeg';
 import Login from './Login';
 import PeoplePage from '../home/PeoplePage';
+import { logout } from '../../modules/commons';
 
 import Register from './Register';
 
@@ -45,11 +54,22 @@ class LoginScreen extends React.Component {
       button: false,
       login: false,
       badCreds: false,
-      token: null
+      token: null,
+      anchorEl: null
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
+
+
+  handleMenu = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleCloseMenu = () => {
+    this.setState({ anchorEl: null });
+  };
 
   handleClick() {
     const { button } = this.state;
@@ -59,9 +79,11 @@ class LoginScreen extends React.Component {
     });
   }
 
-  handleClose = event => {
-    this.setState({ badCreds: false });
-  };
+  handleLogout() {
+    logout().then(() => {
+      this.setState({ login: false, token: false });
+    })
+  }
 
   handleLogin(token) {
     const { login } = this.state;
@@ -79,16 +101,45 @@ class LoginScreen extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { button, login, token } = this.state;
+    const { button, login, token, anchorEl } = this.state;
+    const open = Boolean(anchorEl);
 
     return (
       <Grid container>
         <Grid item xs={12}>
-          <AppBar style={{ backgroundColor: '#2c3e50' }}>
+          <AppBar style={{ backgroundColor: '#2c3e50' }} >
             <Toolbar>
               <Typography variant='h6' color='inherit' className={classes.grow}>
                 SoSecured
               </Typography>
+              {token && (
+                <div>
+                  <IconButton
+                    aria-owns={open ? 'menu-appbar' : undefined}
+                    aria-haspopup="true"
+                    onClick={this.handleMenu}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={open}
+                    onClose={this.handleCloseMenu}
+                  >
+                    <MenuItem onClick={this.handleLogout}>Disconnect</MenuItem>
+                  </Menu>
+                </div>
+              )}
             </Toolbar>
           </AppBar>
         </Grid>
@@ -129,8 +180,8 @@ class LoginScreen extends React.Component {
                   sendToken={this.sendToken}
                 />
               ) : (
-                <Register handleLogin={this.handleLogin} />
-              )}
+                  <Register handleLogin={this.handleLogin} />
+                )}
               <Grid
                 container
                 justify='center'
@@ -149,18 +200,18 @@ class LoginScreen extends React.Component {
                         Not registered ?
                       </Typography>
                     ) : (
-                      <Typography style={{ color: 'white' }}>
-                        Login page
+                        <Typography style={{ color: 'white' }}>
+                          Login page
                       </Typography>
-                    )}
+                      )}
                   </Button>
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
         ) : (
-          <PeoplePage token={token} />
-        )}
+            <PeoplePage token={token} />
+          )}
       </Grid>
     );
   }

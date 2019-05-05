@@ -63,6 +63,7 @@ class Login extends React.Component {
     const { handleLogin, sendToken } = this.props;
     login({ username, password })
       .then(res => {
+        console.log('promise login')
         handleLogin(res.data.token);
       })
       .catch(() => {

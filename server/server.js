@@ -84,19 +84,8 @@ function routerConfiguration(app) {
     );
 
   //Profile     --- GET
-  router.route('/logout').get(logBuilder.myLogger, (req, res) => {
-    console.log(
-      passport.authenticate('jwt', {
-        session: false
-      })
-    );
-    //Create a function that revoke the token
-    req.logout();
-    res.status(200).send({
-      auth: false,
-      token: null
-    });
-  });
+  router.route('/logout').post(logBuilder.myLogger, authController.isAuthenticated,
+    userController.logout);
 
   //Reset password     --- POST
   router

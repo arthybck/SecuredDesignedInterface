@@ -8,11 +8,14 @@
 
 'use strict';
 
-const User = require('../models/users.js');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 const bcrypt = require('bcrypt');
-const secret = 'mysecret';
 
+const User = require('../models/users.js');
+const blacklist = require('./blacklist.js');
+
+const secret = 'mysecret';
 const MEMBERS = 'Members';
 const ADMINS = 'Admins';
 
@@ -81,7 +84,8 @@ exports.logUser = (req, res) => {
       if (err) return res.status(500).send('Internal Server Error');
       if (!user) return res.status(404).send('Not Found');
 
-      let passwordIsValid = await bcrypt.compare(password, user.password);
+      const passwordIsValid = await bcrypt.compare(password, user.password);
+      console.log(passwordIsValid)
       if (passwordIsValid) {
         let token = jwt.sign(
           {
@@ -103,6 +107,7 @@ exports.logUser = (req, res) => {
 
 // This method is used to reset a user's password
 exports.passwordReset = (req, res) => {
+
   const { email, password } = req.body;
   if (!req || !email || !password) return res.status(400).send('Bad Request');
   else {
@@ -209,3 +214,20 @@ exports.putUser = async (req, response) => {
     }
   }
 };
+
+exports.logout = (req, res) => {
+  console.log('logout')
+  if (req && res.headers) {
+    const token = req.headers["x-access-token"];
+
+    blacklist.addTokenToBlacklist(token);
+    console.log(blacklist.checkBlacklist(token));
+  }
+  passport.authenticate('jwt', {
+    session: false
+  })
+  res.status(200).send({
+    auth: false,
+    token: null
+  });
+}

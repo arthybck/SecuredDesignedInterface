@@ -33,6 +33,17 @@ passport.use(
   })
 );
 
+exports.isAdmin = async (req, res, forward) => {
+  await User.findOne({ _id: req.user.userId }, (err, user) => {
+    if (err) return res.status(500).send("Something went wrong: " + err);
+    else if (user.role !== ADMINS) {
+      return res.status(401).send("Insufficient permission.");
+    } else {
+      forward();
+    }
+  });
+};
+
 exports.isMembers = async (req, res, forward) => {
   await User.findOne({ _id: req.user.userId }, (err, user) => {
     if (err) return res.status(500).send("Something went wrong: " + err);
