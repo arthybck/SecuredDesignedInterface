@@ -72,7 +72,7 @@ class Login extends React.Component {
       })
       .catch(() => {
         this.setState({ credentialError: true });
-        handleLogin('error');
+        handleLogin(null);
       });
   };
 

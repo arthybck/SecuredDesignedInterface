@@ -76,13 +76,12 @@ function routerConfiguration(app) {
       logBuilder.myLogger,
       authController.isAuthenticated,
       blacklist.checkBlacklist,
-      authController.isMembers,
       userController.getUsers
     )
     .put(
       logBuilder.myLogger,
       authController.isAuthenticated,
-      authController.isMembers,
+      blacklist.checkBlacklist,
       userController.putUser
     );
 
@@ -97,7 +96,6 @@ function routerConfiguration(app) {
       logBuilder.myLogger,
       authController.isAuthenticated,
       blacklist.checkBlacklist,
-      authController.isMembers,
       userController.passwordReset
     );
 

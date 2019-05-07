@@ -82,11 +82,13 @@ class LoginScreen extends React.Component {
 
   handleLogin(token) {
     const { login } = this.state;
-    if (token !== 'error') {
+    if (token !== null && token !== 'error') {
       this.setState({
         login: !login,
         token: token
       });
+    } else if (token === null) {
+      this.setState({ button: false })
     } else {
       this.setState({
         badCreds: true

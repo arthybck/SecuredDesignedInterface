@@ -77,7 +77,7 @@ class Register extends React.Component {
     const { handleLogin } = this.props;
     register({ username, email, password })
       .then(res => {
-        handleLogin('ok');
+        handleLogin(null);
       })
       .catch(err => {
         this.setState({ open: true });
