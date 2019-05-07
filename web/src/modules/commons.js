@@ -21,7 +21,6 @@ export const register = ({ email, username, password }) =>
   })
     .then(result => {
       const res = result.data.data;
-      console.log(res);
       return res;
     })
     .catch(err => {
@@ -38,11 +37,9 @@ export const login = ({ username, password }) =>
     data: { username, password }
   })
     .then(result => {
-      console.log('result login function: ', result);
       return result;
     })
     .catch(err => {
-      console.log('error login:', err)
       throw err;
     });
 
@@ -55,11 +52,9 @@ export const logout = () =>
     headers: { 'x-access-token': userToken }
   })
     .then(result => {
-      console.log('result logout function: ', result);
       return true;
     })
     .catch(err => {
-      console.log('error logout:', err)
       throw err;
     });
 
@@ -72,11 +67,9 @@ export const listUsers = token =>
   })
     .then(result => {
       userToken = token;
-      console.log(result);
       return result;
     })
     .catch(err => {
       userToken = token;
-      console.log(err);
       throw err;
     });

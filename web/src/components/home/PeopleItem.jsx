@@ -107,7 +107,6 @@ class PeopleItem extends React.Component {
   };
 
   handleClose = () => {
-    console.log('skurt');
     this.setState({ open: false });
   };
 
@@ -147,7 +146,7 @@ class PeopleItem extends React.Component {
           onClose={this.handleClose}
           TransitionComponent={Transition}
         >
-          <AppBar className={classes.appBar}>
+          <AppBar classes={{ color: '#309FA6' }}>
             <Toolbar>
               <IconButton
                 color='inherit'
@@ -160,7 +159,26 @@ class PeopleItem extends React.Component {
                 {user.username}
               </Typography>
             </Toolbar>
+
           </AppBar>
+          <Grid style={{ marginTop: 120, marginLeft: 120 }}>
+            <Typography variant='h6' color='inherit' className={classes.flex} >
+              firstname: {user.firstname}
+            </Typography>
+            <Typography variant='h6' color='inherit' className={classes.flex}>
+              lastname: {user.lastname}
+            </Typography>
+            <Typography variant='h6' color='inherit' className={classes.flex}>
+              email: {user.email}
+            </Typography>
+            <Typography variant='h6' color='inherit' className={classes.flex}>
+              city: {user.city}
+            </Typography>
+            <Typography variant='h6' color='inherit' className={classes.flex}>
+              age: {user.age}
+            </Typography>
+          </Grid>
+
         </Dialog>
       </Grid>
     );

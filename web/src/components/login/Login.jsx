@@ -42,6 +42,13 @@ const styles = theme => ({
   }
 });
 
+/**
+ * Login - This statefull class function handle the user login to the database
+ *
+ * @param {function} [handleLogin]  This methid is used to handle user interaction between the differents forms and the page
+ *
+ * @returns {element} The element returned by the component
+ */
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -64,10 +71,9 @@ class Login extends React.Component {
 
   handleClick = () => {
     const { username, password } = this.state;
-    const { handleLogin, sendToken } = this.props;
+    const { handleLogin } = this.props;
     login({ username, password })
       .then(res => {
-        console.log('promise login')
         handleLogin(res.data.token);
       })
       .catch(() => {

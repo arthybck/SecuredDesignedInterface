@@ -59,6 +59,13 @@ const styles = theme => ({
   }
 });
 
+/**
+ * Register - This statefull class function handle the user register to the database
+ *
+ * @param {function} [handleLogin]  This methid is used to handle user interaction between the differents forms and the page
+ *
+ * @returns {element} The element returned by the component
+ */
 class Register extends React.Component {
   constructor(props) {
     super(props);
@@ -73,7 +80,6 @@ class Register extends React.Component {
 
   handleClick = () => {
     const { username, email, password } = this.state;
-    console.log(username, email, password);
     const { handleLogin } = this.props;
     register({ username, email, password })
       .then(res => {

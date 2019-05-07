@@ -44,7 +44,6 @@ class PeopleList extends React.Component {
     const { token } = this.props;
 
     listUsers(token).then(res => {
-      console.log(res.data);
       this.setState({ users: res.data, loading: false, completed: 100 });
     });
   }

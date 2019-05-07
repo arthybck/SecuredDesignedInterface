@@ -42,6 +42,11 @@ const styles = theme => ({
   }
 });
 
+/**
+ * LoginScreen - This statefull class function handle the main pages and its content
+ *
+ * @returns {element} The element returned by the component
+ */
 class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -76,7 +81,7 @@ class LoginScreen extends React.Component {
 
   handleLogout() {
     logout().then(() => {
-      this.setState({ login: false, token: false });
+      this.setState({ login: false, token: false, anchorEl: null });
     })
   }
 
